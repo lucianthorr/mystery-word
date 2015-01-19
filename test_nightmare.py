@@ -19,39 +19,46 @@ def test_trim_wordlist():
 
 def test_map_locations():
     wordlist = ["cat","dog","mat","cow","rat","pop","pep","bee","eel","owl"]
-    edict = {0:1, 1:3, 2:1}
-    adict = {1:3}
-    tdict = {2:3}
-    odict = {1:3, 0:1}
+    edict = {(0,1):["eel"], (1,2):["bee"], (1,):["pep"], ("N/A",):["cat","dog","mat","cow","rat","pop","owl"]}
+    adict = {(1,):["cat","mat","rat"],("N/A",):["dog","cow","pop","pep","bee","eel","owl"]}
+    tdict = {(2,):["cat","mat","rat"],("N/A",):["dog","cow","pop","pep","bee","eel","owl"]}
+    odict = {(1,):["dog","cow","pop"], (0,):["owl"], ("N/A",):["cat","mat","rat","pep","bee","eel"]}
     assert nm.map_letter_locations(wordlist, "e") == edict
     assert nm.map_letter_locations(wordlist, "a") == adict
     assert nm.map_letter_locations(wordlist, "t") == tdict
     assert nm.map_letter_locations(wordlist, "o") == odict
-    assert nm.map_letter_locations(wordlist, "x") == {}
+    assert nm.map_letter_locations(wordlist, "x") == {("N/A",):["cat","dog","mat","cow","rat","pop","pep","bee","eel","owl"]}
 
 
 def test_max_locations():
-    location_dict = {0:4, 1:3, 4:2, 8:5}
-    assert nm.max_letter_location(location_dict) == 8
+    location_dict = {(0,):["dog","cow","pop","pep","bee"],
+                     (1,):["dog","cow","pop","pep"],
+                     (2,5):["dog","cow","pop","pep","bee","eel","owl"],
+                     (1,8):["dog","cow","pop","pep","bee","eel"]}
+    assert nm.max_letter_location(location_dict) == (2,5)
+    location_dict[("N/A",)] = ["cat","dog","mat","cow","rat","pop","pep","bee","eel","owl"]
+    assert nm.max_letter_location(location_dict) == ("N/A",)
 
-def test_refine_wordlist():
-    wordlist = ["cat","dog","mat","cow","rat","pop","pep","bee","eel","owl"]
-    assert sorted(nm.refine_wordlist(wordlist,"e",1)) == sorted(["pep","bee","eel"])
-    assert sorted(nm.refine_wordlist(wordlist,"o",1)) == sorted(["dog","cow","pop"])
 
 def test_update_wordlist():
     wordlist = ["hello","bello","hardy","eaten","doggy","kitty","howdy","yello"]
-    y_tuple = (sorted(["hardy","doggy","howdy","kitty"]),4)
+    y_tuple = sorted(["hardy","doggy","kitty","howdy"])
     nm_tuple = nm.update_wordlist(wordlist,"y")
-    assert (sorted(nm_tuple[0]),nm_tuple[1]) == y_tuple
-    wordlist = ["hello","bello","hardy","eaten","doggy","kitty","howdy","yello"]
-    e_tuple = (sorted(["bello","hello","yello"]), 1)
+    assert sorted(nm_tuple) == y_tuple
+    wordlist.append("tank")
+    e_tuple = sorted(["hardy","doggy","kitty","howdy","tank"])
     nm_tuple = nm.update_wordlist(wordlist,"e")
-    assert (sorted(nm_tuple[0]),nm_tuple[1]) == e_tuple
+    assert sorted(nm_tuple) == e_tuple
+
+def test_get_locations():
+    assert nm.get_locations("e", "hello") == (1,)
+    assert nm.get_locations("e", "feet") == (1,2)
+    assert nm.get_locations("e", "reese") == (1,2,4)
+    assert nm.get_locations("e", "snout") == ("N/A",)
 
 def test_print_progress():
     nm.word_length = 5
-    nm.letters_found = [(0,"e"),(3,"t")]
+    nm.letters_found = [("e",(0,)),("t",(3,))]
     assert nm.print_progress() == "e__t_"
-    nm.letters_found = [(0,"t"),(1,"h"),(2,"a"),(3,"t")]
+    nm.letters_found = [("t",(0,3)),("h",(1,)),("a",(2,))]
     assert nm.print_progress() == "that_"
