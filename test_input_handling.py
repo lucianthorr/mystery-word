@@ -47,6 +47,7 @@ def test_choose_difficulty():
     assert mw.choose_difficulty("e") == "e"
     assert mw.choose_difficulty("m") == "m"
     assert mw.choose_difficulty("h") == "h"
+    assert mw.choose_difficulty("n") == "n"
     # requires "py.test -s " with the user input "h"
     # assert mw.choose_difficulty("hard") == "h"
 

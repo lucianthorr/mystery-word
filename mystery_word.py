@@ -1,6 +1,7 @@
 # Jason Aylward
 # Homework 3
 import random
+import nightmare
 
 
 default_wordlist = "/usr/share/dict/words"
@@ -12,12 +13,14 @@ guesses = 8
 difficulty = 0
 
 
+
 def start_game():
     print("Welcome to Mystery Word!\nEnter 'Quit' to Quit anytime.")
     print("""Choose your level of difficulty
             (E)asy
             (M)edium
-            (H)ard""")
+            (H)ard
+            (N)ightmare""")
     difficulty = choose_difficulty(input(">>").lower())
     return difficulty
 
@@ -29,6 +32,8 @@ def choose_difficulty(mode):
         return "m"
     if mode == "h":
         return "h"
+    if mode == "n":
+        return "n"
     else:
         print("Try Again\n")
         return choose_difficulty(input(">>").lower())
@@ -145,8 +150,9 @@ if __name__ == '__main__':
     while True:
         reset_globals()
         difficulty = start_game()
+        nightmare.initialize_nightmare_mode(difficulty)
         mystery_word = generate_word(default_wordlist)
-        while True:
+        while difficulty != "n":
             user_input = input(">>").lower()
             text_output = validate_input(user_input)
             if text_output == "Thanks for playing.\n":
