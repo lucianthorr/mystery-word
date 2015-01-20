@@ -3,6 +3,7 @@
 # Jason Aylward
 # Homework 4
 
+Be sure both mystery_word.py and nightmare.py are in the current directory.
 To run, simply type at the command line:
 
 >>python mystery_word.py
