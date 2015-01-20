@@ -28,14 +28,16 @@ def start_game():
 
 def choose_difficulty(mode):
     """Allows user to enter difficulty and runs recursively on bad input"""
-    if mode == "e":
+    if mode == "e" or mode == "easy":
         return "e"
-    if mode == "m":
+    if mode == "m" or mode == "medium":
         return "m"
-    if mode == "h":
+    if mode == "h" or mode == "hard":
         return "h"
-    if mode == "n":
+    if mode == "n" or mode == "nightmare":
         return "n"
+    if mode == "q" or mode == "quit":
+        return "q"
     else:
         print("Try Again\n")
         return choose_difficulty(input(">>").lower())
@@ -53,7 +55,10 @@ def get_wordlist(file_address):
 def generate_word(file_address):
     """receives the word list from get_wordlist()
     chooses random word within the constraints of word_length
-    and is_common_noun()"""
+    and is_common_noun()
+    If user has chosen to quit or move to nightmare mode, return 0"""
+    if difficulty == "q" or difficulty == "n":
+        return 0
     wordlist = get_wordlist(file_address)
     random_int = random.randint(0, len(wordlist)-1)
     random_word = wordlist[random_int]
@@ -176,7 +181,7 @@ if __name__ == '__main__':
         difficulty = start_game()
         nightmare.initialize_nightmare_mode(difficulty)
         mystery_word = generate_word(default_wordlist)
-        while difficulty != "n":
+        while difficulty != "n" and difficulty != "q":
             user_input = input(">>").lower()
             text_output = validate_input(user_input)
             if text_output == "Thanks for playing.\n":

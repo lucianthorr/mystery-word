@@ -45,9 +45,13 @@ def test_redundant_character_input():
 
 def test_choose_difficulty():
     assert mw.choose_difficulty("e") == "e"
+    assert mw.choose_difficulty("easy") == "e"
     assert mw.choose_difficulty("m") == "m"
+    assert mw.choose_difficulty("medium") == ""
     assert mw.choose_difficulty("h") == "h"
+    assert mw.choose_difficulty("hard") == "h"
     assert mw.choose_difficulty("n") == "n"
+    assert mw.choose_difficulty("nightmare") == "n"
     # requires "py.test -s " with the user input "h"
     # assert mw.choose_difficulty("hard") == "h"
 

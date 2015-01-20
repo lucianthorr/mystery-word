@@ -15,6 +15,8 @@ def initialize_nightmare_mode(difficulty):
         print("You have chosen Evil Mystery Word!")
         print("Please choose a word length")
         word_length = nightmare_length_input(input(">>"))
+        if word_length == "q":
+            return
         nightmare_game_loop()
     else:
         word_length = 0
@@ -26,12 +28,14 @@ def initialize_nightmare_mode(difficulty):
 
 def initialize_scoreboard():
     """ Returns a blank scoreboard of appropriate length. """
-    return "_"*word_length
+    return "_" * word_length
 
 
 def nightmare_length_input(user_input):
     """ validates user_input for choosing a word length.
     Calls itself recursively upon bad input. """
+    if user_input == "quit" or user_input == "q":
+        return "q"
     if(user_input.isdigit()) and (0 < int(user_input) < 20):
         return int(user_input)
     else:
@@ -158,7 +162,9 @@ def nightmare_game_loop():
             nightmare_wordlist = update_wordlist(nightmare_wordlist,
                                                  user_input)
             mw.guessed_letters = mw.guessed_letters + user_input
-            print(nightmare_wordlist)
+            """ Uncomment the following if you would like to see the wordlist
+            divide itself based on the user's guesses. """
+            # print(nightmare_wordlist) uncomment if you would like to see
             scoreboard = print_progress()
         else:
             print(text_output)
