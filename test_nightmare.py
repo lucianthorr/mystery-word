@@ -1,7 +1,11 @@
 import mystery_word as mw
 import nightmare as nm
 
+def test_initialize_scoreboard():
+    nm.word_length = 8
+    assert nm.initialize_scoreboard() == "________"
 
+    
 def test_nightmare_length_input():
     assert nm.nightmare_length_input("5") == 5
     assert nm.nightmare_length_input("19") == 19
